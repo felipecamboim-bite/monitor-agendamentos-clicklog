@@ -9,17 +9,10 @@ st.set_page_config(
     page_title="Monitor de Agendamentos - ClickLog", layout="wide"
 )
 
-# Estilização visual: Cards compactos, centralizados e tema escuro
+# Estilização visual dos cards e componentes customizados
 st.markdown(
     """
     <style>
-    /* Força o tema escuro em toda a aplicação */
-    .stApp, .main, [data-testid="stHeader"], [data-testid="stToolbar"] {
-        background-color: #0e1117 !important;
-        color: #ffffff !important;
-    }
-    
-    /* Cards de métricas */
     .stMetric { 
         background-color: #1e1e1e !important; 
         padding: 10px; 
@@ -36,25 +29,6 @@ st.markdown(
         justify-content: center; 
         color: #ffffff !important;
     }
-    
-    /* Campos de Filtro (Multiselect) - Fundo escuro e texto branco */
-    div[data-baseweb="select"] > div { 
-        background-color: #1e1e1e !important; 
-        color: #ffffff !important;
-        border-color: #333333 !important;
-    }
-    div[data-baseweb="tag"] {
-        background-color: #2b2b2b !important;
-        color: #ffffff !important;
-    }
-    span[data-baseweb="tag"] span {
-        color: #ffffff !important;
-    }
-    input[aria-autocomplete="list"] {
-        color: #ffffff !important;
-    }
-    
-    /* Card de Agendamentos do Dia */
     .card-hoje {
         background-color: #1e1e1e !important;
         border: 1px solid #333333 !important;
@@ -162,11 +136,10 @@ if not df.empty:
 
   st.markdown("---")
 
-  # --- SEÇÃO SUPERIOR: Invertido (Bloco do Dia na Esquerda, Totais na Direita) ---
+  # --- SEÇÃO SUPERIOR: Bloco do Dia na Esquerda, Totais na Direita ---
   col_hoje, col_card1, col_card2 = st.columns([3, 1.5, 1.5])
 
   with col_hoje:
-    # Filtrando dados estritamente para o dia de hoje
     hoje_str = datetime.now().strftime("%d/%m/%Y")
     df_hoje = df[df["Dia_Str"] == hoje_str]
 
@@ -206,7 +179,7 @@ if not df.empty:
 
   st.markdown("---")
 
-  # --- APLICANDO OS FILTROS PARA OS GRÁFICOS (Foco padrão em Ago/Set se nada for marcado) ---
+  # --- APLICANDO OS FILTROS PARA OS GRÁFICOS ---
   df_filtrado = df.copy()
 
   if not filtro_mes:
@@ -223,7 +196,7 @@ if not df.empty:
   if filtro_empresa:
     df_filtrado = df_filtrado[df_filtrado["empresa"].isin(filtro_empresa)]
 
-  # --- GRÁFICO 1: Diário (Degradê Azul) ---
+  # --- GRÁFICO 1: Diário ---
   st.subheader("📅 Volumetria por Data Prevista (Diário)")
   df_diario = (
       df_filtrado.groupby(["data_dt", "Dia_Str"])["volumetria"]
@@ -243,8 +216,18 @@ if not df.empty:
   )
   fig_diario.update_traces(textposition="outside")
   fig_diario.update_layout(
-      xaxis_type="category",
-      xaxis_tickangle=-45,
+      paper_bgcolor="rgba(0,0,0,0)",
+      plot_bgcolor="rgba(0,0,0,0)",
+      font_color="#ffffff",
+      xaxis=dict(
+          showgrid=False,
+          tickangle=-45,
+          type="category",
+          title_font=dict(color="#ffffff"),
+      ),
+      yaxis=dict(
+          showgrid=True, gridcolor="#333333", title_font=dict(color="#ffffff")
+      ),
       margin=dict(t=30, b=30),
       coloraxis_showscale=False,
   )
@@ -255,7 +238,7 @@ if not df.empty:
   c1, c2 = st.columns(2)
 
   with c1:
-    # --- GRÁFICO 2: Mensal (Degradê Azul) ---
+    # --- GRÁFICO 2: Mensal ---
     st.subheader("📈 Volumetria Mensal")
     df_mensal = df_filtrado.groupby("Mês")["volumetria"].sum().reset_index()
     meses_dict = {
@@ -286,14 +269,22 @@ if not df.empty:
     )
     fig_mensal.update_traces(textposition="outside")
     fig_mensal.update_layout(
-        xaxis_type="category",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font_color="#ffffff",
+        xaxis=dict(
+            showgrid=False, type="category", title_font=dict(color="#ffffff")
+        ),
+        yaxis=dict(
+            showgrid=True, gridcolor="#333333", title_font=dict(color="#ffffff")
+        ),
         margin=dict(t=30, b=30),
         coloraxis_showscale=False,
     )
     st.plotly_chart(fig_mensal, width="stretch")
 
   with c2:
-    # --- GRÁFICO 3: Turno (Rosca em tons de azul) ---
+    # --- GRÁFICO 3: Turno ---
     st.subheader("🕒 Volumetria por Turno")
     if "turno" in df_filtrado.columns:
       df_turno = df_filtrado.groupby("turno")["volumetria"].sum().reset_index()
@@ -304,14 +295,20 @@ if not df.empty:
           hole=0.4,
           color_discrete_sequence=px.colors.sequential.Blues_r,
       )
-      fig_turno.update_layout(margin=dict(t=30, b=30))
+      fig_turno.update_layout(
+          paper_bgcolor="rgba(0,0,0,0)",
+          plot_bgcolor="rgba(0,0,0,0)",
+          font_color="#ffffff",
+          margin=dict(t=30, b=30),
+          legend=dict(font=dict(color="#ffffff")),
+      )
       st.plotly_chart(fig_turno, width="stretch")
     else:
       st.warning("Coluna 'turno' não encontrada na tabela.")
 
   st.markdown("---")
 
-  # --- GRÁFICO 4: Ranking de Empresas (Alinhado à esquerda + Degradê Azul) ---
+  # --- GRÁFICO 4: Ranking de Empresas ---
   st.subheader("🏆 Ranking de Empresas (Maior Volume)")
   if "empresa" in df_filtrado.columns:
     df_empresa = (
@@ -333,7 +330,15 @@ if not df.empty:
     )
     fig_empresa.update_traces(textposition="outside")
     fig_empresa.update_layout(
-        yaxis={"categoryorder": "total ascending"},
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font_color="#ffffff",
+        yaxis=dict(
+            categoryorder="total ascending", title_font=dict(color="#ffffff")
+        ),
+        xaxis=dict(
+            showgrid=True, gridcolor="#333333", title_font=dict(color="#ffffff")
+        ),
         margin=dict(t=30, b=30),
         coloraxis_showscale=False,
     )
