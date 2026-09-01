@@ -135,18 +135,8 @@ if not df.empty:
 
   st.markdown("---")
 
-  # --- SEÇÃO SUPERIOR: Cards Gerais + Bloco "Agendamentos do Dia" ---
-  col_card1, col_card2, col_hoje = st.columns([1.5, 1.5, 3])
-
-  with col_card1:
-    vol_total_geral = df["volumetria"].sum()
-    st.metric("Total de Volumes", formata_numero(vol_total_geral))
-
-  with col_card2:
-    total_notas_geral = (
-        df[coluna_notas].nunique() if coluna_notas else len(df)
-    )
-    st.metric("Total de Notas", formata_numero(total_notas_geral))
+  # --- SEÇÃO SUPERIOR: Invertido (Bloco do Dia na Esquerda, Totais na Direita) ---
+  col_hoje, col_card1, col_card2 = st.columns([3, 1.5, 1.5])
 
   with col_hoje:
     # Filtrando dados estritamente para o dia de hoje
@@ -176,6 +166,16 @@ if not df.empty:
         """,
         unsafe_allow_html=True,
     )
+
+  with col_card1:
+    vol_total_geral = df["volumetria"].sum()
+    st.metric("Total de Volumes", formata_numero(vol_total_geral))
+
+  with col_card2:
+    total_notas_geral = (
+        df[coluna_notas].nunique() if coluna_notas else len(df)
+    )
+    st.metric("Total de Notas", formata_numero(total_notas_geral))
 
   st.markdown("---")
 
