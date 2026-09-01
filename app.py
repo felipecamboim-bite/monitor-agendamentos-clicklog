@@ -47,13 +47,14 @@ st.markdown(
     "Painel em tempo real integrado ao Supabase para acompanhamento operacional."
 )
 
-# Suas credenciais do Supabase
-SUPABASE_URL = "https://dmucssgskmhpqdkyovwc.supabase.co"
-SUPABASE_KEY = (
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im"
-    "RtdWNzc2dza21ocHFka3lvdndjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4"
-    "MTEwMjU1NSwiZXhwIjoyMDk2Njc4NTU1fQ.gLBIHNI8tyq6DGnzlXwnMrmNubRylbeR66zq71NNrMw"
-)
+# Credenciais do Supabase (lidas de .streamlit/secrets.toml ou dos
+# "Secrets" do Streamlit Community Cloud - nunca hardcoded no código)
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+
+# Cor de fundo fixa usada em todos os gráficos (evita fundo branco
+# quando o tema não carrega ou o navegador força modo claro)
+DARK_BG = "#1e1e1e"
 
 
 @st.cache_data(ttl=30)
@@ -216,8 +217,8 @@ if not df.empty:
   )
   fig_diario.update_traces(textposition="outside")
   fig_diario.update_layout(
-      paper_bgcolor="#1e1e1e",
-      plot_bgcolor="#1e1e1e",
+      paper_bgcolor=DARK_BG,
+      plot_bgcolor=DARK_BG,
       font_color="#ffffff",
       xaxis=dict(
           showgrid=False,
@@ -269,8 +270,8 @@ if not df.empty:
     )
     fig_mensal.update_traces(textposition="outside")
     fig_mensal.update_layout(
-        paper_bgcolor="#1e1e1e",
-        plot_bgcolor="#1e1e1e",
+        paper_bgcolor=DARK_BG,
+        plot_bgcolor=DARK_BG,
         font_color="#ffffff",
         xaxis=dict(
             showgrid=False, type="category", title_font=dict(color="#ffffff")
@@ -296,8 +297,8 @@ if not df.empty:
           color_discrete_sequence=px.colors.sequential.Blues_r,
       )
       fig_turno.update_layout(
-          paper_bgcolor="#1e1e1e",
-          plot_bgcolor="#1e1e1e",
+          paper_bgcolor=DARK_BG,
+          plot_bgcolor=DARK_BG,
           font_color="#ffffff",
           margin=dict(t=30, b=30),
           legend=dict(font=dict(color="#ffffff")),
@@ -330,11 +331,11 @@ if not df.empty:
     )
     fig_empresa.update_traces(textposition="outside")
     fig_empresa.update_layout(
-        paper_bgcolor="#1e1e1e",
-        plot_bgcolor="#1e1e1e",
+        paper_bgcolor=DARK_BG,
+        plot_bgcolor=DARK_BG,
         font_color="#ffffff",
         yaxis=dict(
-            categoryorder="total ascending", title_fonst=dict(color="#ffffff")
+            categoryorder="total ascending", title_font=dict(color="#ffffff")
         ),
         xaxis=dict(
             showgrid=True, gridcolor="#333333", title_font=dict(color="#ffffff")
