@@ -13,11 +13,13 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* Força o tema escuro em toda a aplicação, ignorando o modo do navegador */
+    /* Força o tema escuro em toda a aplicação */
     .stApp, .main, [data-testid="stHeader"], [data-testid="stToolbar"] {
         background-color: #0e1117 !important;
         color: #ffffff !important;
     }
+    
+    /* Cards de métricas */
     .stMetric { 
         background-color: #1e1e1e !important; 
         padding: 10px; 
@@ -34,10 +36,25 @@ st.markdown(
         justify-content: center; 
         color: #ffffff !important;
     }
+    
+    /* Campos de Filtro (Multiselect) - Fundo escuro e texto branco */
     div[data-baseweb="select"] > div { 
         background-color: #1e1e1e !important; 
         color: #ffffff !important;
+        border-color: #333333 !important;
     }
+    div[data-baseweb="tag"] {
+        background-color: #2b2b2b !important;
+        color: #ffffff !important;
+    }
+    span[data-baseweb="tag"] span {
+        color: #ffffff !important;
+    }
+    input[aria-autocomplete="list"] {
+        color: #ffffff !important;
+    }
+    
+    /* Card de Agendamentos do Dia */
     .card-hoje {
         background-color: #1e1e1e !important;
         border: 1px solid #333333 !important;
