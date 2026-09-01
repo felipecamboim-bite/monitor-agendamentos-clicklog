@@ -13,9 +13,13 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    .main { background-color: #0e1117; }
+    /* Força o tema escuro em toda a aplicação, ignorando o modo do navegador */
+    .stApp, .main, [data-testid="stHeader"], [data-testid="stToolbar"] {
+        background-color: #0e1117 !important;
+        color: #ffffff !important;
+    }
     .stMetric { 
-        background-color: #1e1e1e; 
+        background-color: #1e1e1e !important; 
         padding: 10px; 
         border-radius: 8px; 
         border: 1px solid #333333; 
@@ -24,17 +28,23 @@ st.markdown(
     .stMetric label { 
         display: block; 
         text-align: center; 
+        color: #b0b0b0 !important;
     }
     .stMetric [data-testid="stMetricValue"] { 
         justify-content: center; 
+        color: #ffffff !important;
     }
-    div[data-baseweb="select"] > div { background-color: #1e1e1e; }
+    div[data-baseweb="select"] > div { 
+        background-color: #1e1e1e !important; 
+        color: #ffffff !important;
+    }
     .card-hoje {
-        background-color: #1e1e1e;
-        border: 1px solid #333333;
+        background-color: #1e1e1e !important;
+        border: 1px solid #333333 !important;
         padding: 15px;
         border-radius: 8px;
         height: 100%;
+        color: #ffffff !important;
     }
     </style>
 """,
