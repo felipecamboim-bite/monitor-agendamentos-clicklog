@@ -216,8 +216,8 @@ if not df.empty:
   )
   fig_diario.update_traces(textposition="outside")
   fig_diario.update_layout(
-      paper_bgcolor="rgba(0,0,0,0)",
-      plot_bgcolor="rgba(0,0,0,0)",
+      paper_bgcolor="#1e1e1e",
+      plot_bgcolor="#1e1e1e",
       font_color="#ffffff",
       xaxis=dict(
           showgrid=False,
@@ -269,8 +269,8 @@ if not df.empty:
     )
     fig_mensal.update_traces(textposition="outside")
     fig_mensal.update_layout(
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="#1e1e1e",
+        plot_bgcolor="#1e1e1e",
         font_color="#ffffff",
         xaxis=dict(
             showgrid=False, type="category", title_font=dict(color="#ffffff")
@@ -296,8 +296,8 @@ if not df.empty:
           color_discrete_sequence=px.colors.sequential.Blues_r,
       )
       fig_turno.update_layout(
-          paper_bgcolor="rgba(0,0,0,0)",
-          plot_bgcolor="rgba(0,0,0,0)",
+          paper_bgcolor="#1e1e1e",
+          plot_bgcolor="#1e1e1e",
           font_color="#ffffff",
           margin=dict(t=30, b=30),
           legend=dict(font=dict(color="#ffffff")),
@@ -330,11 +330,11 @@ if not df.empty:
     )
     fig_empresa.update_traces(textposition="outside")
     fig_empresa.update_layout(
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="#1e1e1e",
+        plot_bgcolor="#1e1e1e",
         font_color="#ffffff",
         yaxis=dict(
-            categoryorder="total ascending", title_font=dict(color="#ffffff")
+            categoryorder="total ascending", title_fonst=dict(color="#ffffff")
         ),
         xaxis=dict(
             showgrid=True, gridcolor="#333333", title_font=dict(color="#ffffff")
