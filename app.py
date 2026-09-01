@@ -1,3 +1,4 @@
+from datetime import datetime
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -28,6 +29,13 @@ st.markdown(
         justify-content: center; 
     }
     div[data-baseweb="select"] > div { background-color: #1e1e1e; }
+    .card-hoje {
+        background-color: #1e1e1e;
+        border: 1px solid #333333;
+        padding: 15px;
+        border-radius: 8px;
+        height: 100%;
+    }
     </style>
 """,
     unsafe_allow_html=True,
@@ -127,16 +135,47 @@ if not df.empty:
 
   st.markdown("---")
 
-  # --- 2 BLOCOS DE MÉTRICAS COMPACTOS E CENTRALIZADOS (CONSIDERANDO O GERAL TOTAL DA BASE) ---
-  col1, col2, col_vazia1, col_vazia2 = st.columns([2, 2, 3, 3])
-  with col1:
+  # --- SEÇÃO SUPERIOR: Cards Gerais + Bloco "Agendamentos do Dia" ---
+  col_card1, col_card2, col_hoje = st.columns([1.5, 1.5, 3])
+
+  with col_card1:
     vol_total_geral = df["volumetria"].sum()
     st.metric("Total de Volumes", formata_numero(vol_total_geral))
-  with col2:
+
+  with col_card2:
     total_notas_geral = (
         df[coluna_notas].nunique() if coluna_notas else len(df)
     )
     st.metric("Total de Notas", formata_numero(total_notas_geral))
+
+  with col_hoje:
+    # Filtrando dados estritamente para o dia de hoje
+    hoje_str = datetime.now().strftime("%d/%m/%Y")
+    df_hoje = df[df["Dia_Str"] == hoje_str]
+
+    vol_hoje = df_hoje["volumetria"].sum() if not df_hoje.empty else 0
+    notas_hoje = (
+        df_hoje[coluna_notas].nunique()
+        if (not df_hoje.empty and coluna_notas)
+        else len(df_hoje)
+    )
+    empresas_hoje = (
+        df_hoje["empresa"].dropna().unique().tolist()
+        if (not df_hoje.empty and "empresa" in df_hoje.columns)
+        else []
+    )
+
+    st.markdown(
+        f"""
+        <div class="card-hoje">
+            <h4 style="margin: 0 0 10px 0; color: #ffffff; font-size: 16px;">📌 Agendamentos do Dia ({hoje_str})</h4>
+            <p style="margin: 4px 0; color: #b0b0b0; font-size: 14px;"><b>Volumes:</b> {formata_numero(vol_hoje)} &nbsp;|&nbsp; <b>Notas:</b> {formata_numero(notas_hoje)}</p>
+            <p style="margin: 8px 0 2px 0; color: #b0b0b0; font-size: 13px;"><b>Empresas com agenda hoje:</b></p>
+            <p style="margin: 0; color: #ffffff; font-size: 13px;">{', '.join(empresas_hoje) if empresas_hoje else 'Nenhuma empresa agendada para hoje.'}</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
   st.markdown("---")
 
